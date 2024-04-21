@@ -2,6 +2,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib.animation import FuncAnimation
 
+
 L = 10
 sigma = 1
 p0 = 18.7
@@ -9,7 +10,7 @@ hbar = 1e-34
 s = sigma / L
 p = L * p0 / hbar
 m = 1
-w0 = np.pi*2*hbar/2*m*L**2
+w0 = np.pi**2 * hbar / 2 * m *L**2
 N = 565
 
 def cn_integral(n, L, sigma, p0, hbar):
@@ -29,8 +30,8 @@ def dn_integral(n, L, sigma, p0, hbar):
 def check_sum():
     sum = 0
     for i in range(1,N):
-        cn = cn_integral(2*i-1, L, sigma, p0, hbar)
-        dn = dn_integral(2*i, L, sigma, p0, hbar)
+        cn = cn_integral(2 * i - 1, L, sigma, p0, hbar)
+        dn = dn_integral(2 * i, L, sigma, p0, hbar)
         sum += np.abs(cn)**2 + np.abs(dn)**2 
     print(sum)
 
@@ -48,8 +49,8 @@ def v(n, x):
 cn = np.zeros(N)
 dn = np.empty(N, dtype=complex)
 for  i in range (1, N):
-    cn[i-1] = cn_integral(2*i-1, L, sigma, p0, hbar)
-    dn[i-1] = dn_integral(2*i, L, sigma, p0, hbar)
+    cn[i-1] = cn_integral(2 * i - 1, L, sigma, p0, hbar)
+    dn[i-1] = dn_integral(2 * i, L, sigma, p0, hbar)
 
 def f(x, t):
     sum = 0
@@ -58,17 +59,18 @@ def f(x, t):
         di = dn[i-1]
         ui = u(i, x)
         vi = v(i, x)
-        sum += np.abs(ci)**2 * ui**2 + np.abs(di)**2 * vi**2 - 2*ci*abs(di)*ui*vi*np.sin(4*i-1)*w0*t
+        sum += np.abs(ci)**2 * ui**2 + np.abs(di)**2 * vi**2 - 2 * ci * abs(di) * ui * vi * np.sin(4 * i - 1)* w0 * t
         for j in range (1, i):
             cj = cn[j-1]
             dj = dn[j-1]
             uj = u(j, x)
             vj = v(j, x)
-            sum += 2 * ci * cj * ui * uj * np.cos( (2*i - 1)**2 - (2*j - 1)**2 )*w0*t
+            sum += 2 * ci * cj * ui * uj * np.cos( (2 * i - 1)**2 - (2 * j - 1)**2 )* w0 * t
             sum += 2 * np.abs(di) * np.abs(dj) * vi * vj * np.cos( (2*i)**2 - (2*j)**2 ) * w0 * t
             sum -= 2 * ci * np.abs(di) * ui * vj * np.sin( (2*i - 1)**2 - (2*j)**2 ) * w0 * t
             sum -= 2 * ci * np.abs(dj) * ui * vj * np.sin( (2*j - 1)**2 - (2*i)**2 ) * w0 * t
     return sum
+
 
 # Define the range of x values
 x_values = np.linspace(-L, L, 50)
